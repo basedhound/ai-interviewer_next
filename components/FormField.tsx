@@ -6,7 +6,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import FileUpload from "./FileUpload";
+// import FileUpload from "./FileUpload";
 import { Input } from "@/components/ui/input";
 
 interface FormFieldProps<T extends FieldValues> {
@@ -27,8 +27,8 @@ const FormField = <T extends FieldValues>({
   placeholder,
   type = "text",
   disabled = false,
-  accept,
-  folder,
+  // accept,
+  // folder,
 }: FormFieldProps<T>) => {
   return (
     <Controller

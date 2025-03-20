@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 
 const InterviewCard = async ({
   interviewId,
-  userId,
+  // userId,
   coverImage,
   role,
   type,
-  techstack,
+  // techstack,
   createdAt,
 }: InterviewCardProps) => {
   const feedback = null as Feedback | null;
