@@ -1,27 +1,37 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
-import dayjs from "dayjs";
 
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
+import DisplayTechIcons from "./DisplayTechIcons";
+
+import { cn, getRandomInterviewCover } from "@/lib/utils";
+import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
 
 const InterviewCard = async ({
   interviewId,
-  // userId,
-  coverImage,
+  userId,
   role,
   type,
-  // techstack,
+  techstack,
   createdAt,
 }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
+  const feedback =
+    userId && interviewId
+      ? await getFeedbackByInterviewId({
+          interviewId,
+          userId,
+        })
+      : null;
+
+  const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
   const badgeColor =
     {
       Behavioral: "bg-light-400",
       Mixed: "bg-light-600",
       Technical: "bg-light-800",
-    }[type] || "bg-light-600";
+    }[normalizedType] || "bg-light-600";
 
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
@@ -29,7 +39,7 @@ const InterviewCard = async ({
 
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96">
-      <div className="card flex flex-col p-6 relative overflow-hidden gap-10 justify-between min-h-full">
+      <div className="card-interview">
         <div>
           {/* Type Badge */}
           <div
@@ -38,12 +48,12 @@ const InterviewCard = async ({
               badgeColor
             )}
           >
-            <p className="text-sm font-semibold capitalize">{type}</p>
+            <p className="badge-text ">{normalizedType}</p>
           </div>
 
           {/* Cover Image */}
           <Image
-            src={coverImage!}
+            src={getRandomInterviewCover()}
             alt="cover-image"
             width={90}
             height={90}
@@ -72,14 +82,14 @@ const InterviewCard = async ({
           </div>
 
           {/* Feedback or Placeholder Text */}
-          <p className="line-clamp-2 mt-5 text-light-100">
+          <p className="line-clamp-2 mt-5">
             {feedback?.finalAssessment ||
               "You haven't taken this interview yet. Take it now to improve your skills."}
           </p>
         </div>
 
         <div className="flex flex-row justify-between">
-          <p>Tech Icons</p>
+          <DisplayTechIcons techStack={techstack} />
 
           <Button className="btn-primary">
             <Link
